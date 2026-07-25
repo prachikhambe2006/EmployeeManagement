@@ -10,8 +10,7 @@ document.getElementById("employeeForm").addEventListener("submit", function(e) {
   const dept = document.getElementById("empDept").value;
   const salary = document.getElementById("empSalary").value;
 
-  const employee = { id, name, dept, salary };
-  employees.push(employee);
+  employees.push({ id, name, dept, salary });
   localStorage.setItem("employees", JSON.stringify(employees));
 
   alert("Employee Added Successfully!");
@@ -19,20 +18,34 @@ document.getElementById("employeeForm").addEventListener("submit", function(e) {
   displayEmployees();
 });
 
-// Table mein employees dikhane ke liye
-function displayEmployees() {
+// Table mein employees dikhane ke liye (search result ya poori list)
+function displayEmployees(list = employees) {
   const tbody = document.querySelector("#empTable tbody");
   tbody.innerHTML = "";
-  employees.forEach(emp => {
-    const row = `<tr>
-      <td>${emp.id}</td>
-      <td>${emp.name}</td>
-      <td>${emp.dept}</td>
-      <td>${emp.salary}</td>
+  list.forEach(emp => {
+    tbody.innerHTML += `<tr>
+      <td>${emp.id}</td><td>${emp.name}</td><td>${emp.dept}</td><td>${emp.salary}</td>
       <td><button onclick="deleteEmployee('${emp.id}')">Delete</button></td>
     </tr>`;
-    tbody.innerHTML += row;
   });
+}
+
+// Search Employee by ID
+document.getElementById("searchBtn").addEventListener("click", function() {
+  const searchId = document.getElementById("searchId").value;
+  const result = employees.filter(emp => emp.id === searchId);
+  if (result.length > 0) {
+    displayEmployees(result);
+  } else {
+    alert("Employee not found!");
+  }
+});
+
+// Delete Employee
+function deleteEmployee(id) {
+  employees = employees.filter(emp => emp.id !== id);
+  localStorage.setItem("employees", JSON.stringify(employees));
+  displayEmployees();
 }
 
 displayEmployees();
