@@ -47,5 +47,5 @@ function deleteEmployee(id) {
   localStorage.setItem("employees", JSON.stringify(employees));
   displayEmployees();
 }
-
+// Display and Delete functionality integrated
 displayEmployees();
